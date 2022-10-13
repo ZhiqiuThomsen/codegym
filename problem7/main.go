@@ -7,7 +7,7 @@ import (
 )
 
 func main() {
-	result := lookAndSay(100)
+	result := lookAndSay(50)
 	fmt.Println(result)
 }
 func lookAndSay(n int) int {
@@ -23,9 +23,9 @@ func lookAndSay(n int) int {
 	}
 	for i := 2; i <= n; i++ {
 		// if the sequence is large, break the sequence into chunks
-		if len(seq) > 1000 {
+		if len(seq) > 100 {
 
-			chunks := chunkSlice(seq, 400)
+			chunks := chunkSlice(seq, 50)
 			// all next sequßences from chunk with index
 			var wg sync.WaitGroup
 			nextSequences := make([]chunkSeqResult, len(chunks))
@@ -74,6 +74,7 @@ func lookAndSay(n int) int {
 		} else {
 			seq = nextLookAndSaySeq(seq)
 		}
+		// fmt.Println(i)
 	}
 
 	return sum(seq)
