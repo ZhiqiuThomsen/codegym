@@ -7,7 +7,7 @@ import (
 )
 
 func main() {
-	result := lookAndSay(50)
+	result := lookAndSay(100)
 	fmt.Println(result)
 }
 func lookAndSay(n int) int {
@@ -23,29 +23,28 @@ func lookAndSay(n int) int {
 	}
 	for i := 2; i <= n; i++ {
 		// if the sequence is large, break the sequence into chunks
-		if len(seq) > 100 {
+		if len(seq) > 1000 {
 
-			chunks := chunkSlice(seq, 100)
-			// all next sequences from chunk with index
-			var nextSequences []chunkSeqResult
+			chunks := chunkSlice(seq, 400)
+			// all next sequßences from chunk with index
 			var wg sync.WaitGroup
+			nextSequences := make([]chunkSeqResult, len(chunks))
 
-			for j := 0; j < len(chunks); j++ {
+			for j, chunk := range chunks {
 				wg.Add(1)
-
-				go func(index int) {
-					defer wg.Done()
+				go func(index int, v []int) {
 
 					//find next sequence from the chunks, keep track of the index
-					newseq := nextLookAndSaySeq(chunks[index])
+					newseq := nextLookAndSaySeq(v)
 					chunkSeq := chunkSeqResult{
 						index: index,
 						seq:   newseq,
 					}
 
-					nextSequences = append(nextSequences, chunkSeq)
+					nextSequences[index] = chunkSeq
 
-				}(j)
+					defer wg.Done()
+				}(j, chunk)
 			}
 			//wait for go routin to finish
 			wg.Wait()
@@ -75,8 +74,6 @@ func lookAndSay(n int) int {
 		} else {
 			seq = nextLookAndSaySeq(seq)
 		}
-
-		// fmt.Println(i, " line:", seq)
 	}
 
 	return sum(seq)
