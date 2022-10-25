@@ -9,23 +9,23 @@ func fibNumber() func(i int) *big.Int {
 	a := big.NewInt(1)
 	b := big.NewInt(0)
 	return func(i int) *big.Int {
-		//swap values and return new b
-		b.Add(a, b)
-		b, a = a, b
+		//add and swap
+		b, a = a, b.Add(a, b)
 		return b
 	}
 }
 
 func main() {
 	f := fibNumber()
-	i, fabN := 0, big.NewInt(0)
+	i, fibN := 0, big.NewInt(0)
 
-	var limit big.Int
+	var edge big.Int
 	// smallest integer with 10000 digits
-	limit.Exp(big.NewInt(10), big.NewInt(9999), nil)
+	edge.Exp(big.NewInt(10), big.NewInt(9999), nil)
 
-	for fabN.Cmp(&limit) < 0 {
-		fabN = f(i)
+	//loop until the fib number is larger than the edge number
+	for fibN.Cmp(&edge) < 0 {
+		fibN = f(i)
 		i++
 	}
 	fmt.Println(i)
